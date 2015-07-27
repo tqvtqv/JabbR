@@ -1,9 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-using System.Net.Http.Formatting;
-using System.Web.Http;
-using JabbR;
+﻿using JabbR;
 using JabbR.Hubs;
 using JabbR.Infrastructure;
 using JabbR.Middleware;
@@ -18,12 +13,14 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataHandler;
 using Microsoft.Owin.Security.DataProtection;
-
 using Nancy.Owin;
-
 using Newtonsoft.Json.Serialization;
 using Ninject;
 using Owin;
+using System;
+using System.IO;
+using System.Net.Http.Formatting;
+using System.Web.Http;
 
 [assembly: OwinStartup(typeof(Startup), "Configuration")]
 
