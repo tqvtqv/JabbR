@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using JabbR.Models;
+﻿using JabbR.Models;
 using JabbR.Services;
+using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Newtonsoft.Json;
-using Microsoft.Owin;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JabbR.Infrastructure
 {
-    public class JabbRFormsAuthenticationProvider : ICookieAuthenticationProvider
+    public class JabbRFormsAuthenticationProvider : CookieAuthenticationProvider
     {
         private readonly IJabbrRepository _repository;
         private readonly IMembershipService _membershipService;
@@ -22,12 +21,12 @@ namespace JabbR.Infrastructure
             _membershipService = membershipService;
         }
 
-        public Task ValidateIdentity(CookieValidateIdentityContext context)
+        public override Task ValidateIdentity(CookieValidateIdentityContext context)
         {
             return TaskAsyncHelper.Empty;
         }
 
-        public void ResponseSignIn(CookieResponseSignInContext context)
+        public override void ResponseSignIn(CookieResponseSignInContext context)
         {
             var authResult = new AuthenticationResult
             {
@@ -93,7 +92,7 @@ namespace JabbR.Infrastructure
 
                 AddClaim(context, targetUser);
             }
-            else if(!principal.HasPartialIdentity())
+            else if (!principal.HasPartialIdentity())
             {
                 // A partial identity means the user needs to add more claims to login
                 context.Identity.AddClaim(new Claim(JabbRClaimTypes.PartialIdentity, "true"));
@@ -151,9 +150,10 @@ namespace JabbR.Infrastructure
             return null;
         }
 
-        public void ApplyRedirect(CookieApplyRedirectContext context)
+        public override void ApplyRedirect(CookieApplyRedirectContext context)
         {
             context.Response.Redirect(context.RedirectUri);
         }
+
     }
 }
